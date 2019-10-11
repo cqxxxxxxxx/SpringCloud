@@ -70,10 +70,11 @@ cat ./.env
 echo ''
 
 #按需要开启公共服务
-echo '==================4.2启动 mysql or redis or rabbitmq ========'
+echo '==================4.2启动 mysql or redis or rabbitmq && 初始化数据库 ========'
 docker-compose -f docker-compose.yml up -d mysql
 docker-compose -f docker-compose.yml up -d redis
 docker-compose -f docker-compose.yml up -d rabbitmq
+docker-compose -f docker-compose.yml -f docker-compose.db-init.yml up mysql-init
 
 echo '当前目录:' && pwd
 

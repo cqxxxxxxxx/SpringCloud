@@ -5,9 +5,11 @@ services:
     container_name: sc-redis
     restart: always
     volumes:
-      - type: volume
-        source: redis-data
-        target: /data
+      - redis-data:/data
+#  The long syntax is new in v3.2
+#      - type: volume
+#        source: redis-data
+#        target: /data
     environment:
       - REDIS_PASSWORD=123456
     networks:
@@ -21,9 +23,11 @@ services:
     container_name: sc-rabbitmq
     restart: always
     volumes:
-      - type: volume
-        source: mq-data
-        target: /var/lib/rabbitmq/mnesia
+      - mq-data:/var/lib/rabbitmq/mnesia
+#  The long syntax is new in v3.2
+#      - type: volume
+#        source: mq-data
+#        target: /var/lib/rabbitmq/mnesia
     networks:
       - sc-net
     ports:
@@ -39,9 +43,11 @@ services:
     ports:
       - 3306:3306
     volumes:
-      - type: volume
-        source: mysql-data
-        target: /var/lib/mysql
+      - mysql-data:/var/lib/mysql
+#   The long syntax is new in v3.2
+#      - type: volume
+#        source: mysql-data
+#        target: /var/lib/mysql
 #        不确定他的作用 =>  flag to disable copying of data from a container when a volume is created
 #        volume:
 #          nocopy: true
