@@ -2,7 +2,7 @@
 
 ## 启动基础服务
 
-postgres、redis、rabbitmq
+mysql、redis、rabbitmq
  
 `docker-compose up -d`
 

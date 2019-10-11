@@ -16,7 +16,7 @@ services:
       - ../data/config-server/logs:/opt
     environment:
       # 开启Portal,默认端口: 8070
-      PORTAL_DB: jdbc:mysql://apollo-db:3306/ApolloPortalDB?characterEncoding=utf8
+      PORTAL_DB: jdbc:mysql://sc-mysql:3306/ApolloPortalDB?characterEncoding=utf8
       PORTAL_DB_USER: root
       PORTAL_DB_PWD: root123
       # 指定远程DEV地址
@@ -40,7 +40,7 @@ services:
       - ../data/config-server/logs:/opt
     environment:
       # 开启dev环境, 默认端口: config 8080, admin 8090 , 只用开config服务
-      DEV_DB: jdbc:mysql://apollo-db:3306/ApolloConfigDB?characterEncoding=utf8
+      DEV_DB: jdbc:mysql://sc-mysql:3306/ApolloConfigDB?characterEncoding=utf8
       DEV_DB_USER: root
       DEV_DB_PWD: root123
 

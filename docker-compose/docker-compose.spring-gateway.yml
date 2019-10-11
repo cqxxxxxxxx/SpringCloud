@@ -12,6 +12,7 @@ services:
     env_file: .env
     environment:
       TZ: Asia/Shanghai
+      JAVA_OPTS: "-Xmx1g -Xms1g -Xss512k -Djava.security.egd=file:/dev/./urandom"
 
   #网关管理服务
   gateway-admin:
@@ -25,3 +26,4 @@ services:
     env_file: .env
     environment:
       TZ: Asia/Shanghai
+      JAVA_OPTS: "-Xmx1g -Xms1g -Xss512k -Djava.security.egd=file:/dev/./urandom"

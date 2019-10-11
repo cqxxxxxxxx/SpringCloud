@@ -5,7 +5,9 @@ services:
     container_name: sc-redis
     restart: always
     volumes:
-      - ../data/redis:/data
+      - type: volume
+        source: redis-data
+        target: /data
     environment:
       - REDIS_PASSWORD=123456
     networks:
@@ -19,7 +21,9 @@ services:
     container_name: sc-rabbitmq
     restart: always
     volumes:
-      - ../data/rabbitmq:/var/lib/rabbitmq/mnesia
+      - type: volume
+        source: mq-data
+        target: /var/lib/rabbitmq/mnesia
     networks:
       - sc-net
     ports:
@@ -35,7 +39,12 @@ services:
     ports:
       - 3306:3306
     volumes:
-      - ../data/mysql:/var/lib/mysql
+      - type: volume
+        source: mysql-data
+        target: /var/lib/mysql
+#        不确定他的作用 =>  flag to disable copying of data from a container when a volume is created
+#        volume:
+#          nocopy: true
     environment:
       TZ: Asia/Shanghai
       MYSQL_ROOT_PASSWORD: root123
@@ -53,6 +62,21 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root123
 
+# 使用同一个网络
+# notice: 这个只适合单机环境下运行。 多机器部署情况下需要改动很多配置(数据库连接，注册中心地址等等等等)
 networks:
   sc-net:
     external: false
+
+#  改用volume来持久化有状态服务
+#  volume 在 docker 中被推荐为首选方式，它与 bind mount 相比，有以下优点：
+#  1. 与 bind mount 相比，volume 更容易备份或迁移。
+#  2. 可以使用 Docker CLI 命令或 Docker API 来管理。
+#  3. volume 在 Linux 和 Windows 容器上都能工作。
+#  4. volume 可以在多个容器之间更安全的共享。
+#  5. volume 驱动程序允许你在远程主机或云上提供存储、加密或其他功能。
+#  6. 新 volume 的内容可以由容器预填充。
+volumes:
+  mysql-data:
+  redis-data:
+  mq-data:
