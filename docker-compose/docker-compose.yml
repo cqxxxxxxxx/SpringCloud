@@ -49,19 +49,6 @@ services:
       TZ: Asia/Shanghai
       MYSQL_ROOT_PASSWORD: root123
 
-  mysql-init:
-    image: mysql:5.7
-    command: /init-db.sh
-    networks:
-      - sc-net
-    volumes:
-      - ../auth/db:/sql/auth
-      - ../gateway/gateway-admin/src/main/db:/sql/gateway
-      - ../sysadmin/db:/sql/sysadmin
-      - ./init-db.sh:/init-db.sh
-    environment:
-      MYSQL_ROOT_PASSWORD: root123
-
 # 使用同一个网络
 # notice: 这个只适合单机环境下运行。 多机器部署情况下需要改动很多配置(数据库连接，注册中心地址等等等等)
 networks:

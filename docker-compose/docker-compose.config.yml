@@ -43,14 +43,3 @@ services:
       DEV_DB: jdbc:mysql://sc-mysql:3306/ApolloConfigDB?characterEncoding=utf8
       DEV_DB_USER: root
       DEV_DB_PWD: root123
-
-  apollo-db-init:
-    image: mysql:5.7
-    command: /init-db.sh
-    networks:
-      - sc-net
-    volumes:
-      - ./apollo/sql:/sql
-      - ./init-db.sh:/init-db.sh
-    environment:
-      MYSQL_ROOT_PASSWORD: root123
