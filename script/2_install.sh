@@ -1,51 +1,8 @@
 #!/usr/bin/env bash
-echo '==================1.开发环境准备================================'
-echo '1.1请确保安装并java8, git, maven并设置好环境变量'
-echo '1.2请确保安装并docker,docker-compose并设置好环境变量'
 
-#read -p '是否需要初始化且重置所有数据库(auth,gateway,apollo,admin)? [Y/n]  ' dbInit
-#case $dbInit in
-#    [yY][eE][sS]|[yY])
-#		echo "Yes 进行数据库初始化"
-#    docker-compose -f docker-compose.yml -f docker-compose.db-init.yml up mysql-init
-#		;;
-#    [nN][oO]|[nN])
-#		echo "No 不进行初始化且重置数据库操作"
-#       	;;
-#    *)
-#		echo "Invalid input... 终止执行"
-#		exit 1
-#		;;
-#esac
-
-#确认环境信息准备就绪
-read -r -p "开发环境准备好了吗? [Y/n] " envConfirm
-case $envConfirm in
-    [yY][eE][sS]|[yY])
-		echo "Yes 继续执行"
-		;;
-    [nN][oO]|[nN])
-		echo "No 终止执行"
-		exit 1
-       	;;
-    *)
-		echo "Invalid input... 终止执行"
-		exit 1
-		;;
-esac
-
-
-
-echo '==================1.3清理当前脚本启动的容器和产生的镜像(可选的)=============='
-#清理当前脚本启动的容器和产生的镜像(可选的)
-docker stop sc-rabbitmq sc-redis sc-mysql
-docker rm sc-rabbitmq sc-redis sc-mysql
-
-docker stop sc-monitor-admin sc-authorization-server sc-authentication-server sc-organization sc-apollo-portal-server sc-apollo-config-server sc-apollo-db sc-eureka sc-gateway-admin sc-gateway-web
-docker rm sc-monitor-admin sc-authorization-server sc-authentication-server sc-organization sc-apollo-portal-server sc-apollo-config-server sc-apollo-db sc-eureka sc-gateway-admin sc-gateway-web
-docker image rm cike/admin cike/authorization-server:latest cike/authentication-server:latest cike/organization:latest cike/gateway-admin:latest cike/gateway-web:latest cike/eureka-server:latest
-
-echo '==================2.安装认证公共包到本地maven仓库=================='
+#进入主目录
+cd ..
+echo '==================1.安装认证公共包到本地maven仓库=================='
 #安装认证公共包到本地maven仓库
 cd common && mvn install
 echo '当前目录:' && pwd
@@ -53,31 +10,9 @@ echo '当前目录:' && pwd
 #回到根目录
 cd -
 
-echo '==================3.安装认证客户端到本地maven仓库=================='
+echo '==================2.安装认证客户端到本地maven仓库=================='
 #安装认证客户端到本地maven仓库
 cd auth/authentication-client && mvn install
-echo '当前目录:' && pwd
-
-#回到根目录
-cd -
-
-echo '==================4.docker-compose启动公共服务==================='
-#去docker-compose目录
-cd docker-compose
-echo '==================4.1显示环境变量: docker-compose/.env =========='
-#显示环境变量
-cat ./.env
-echo ''
-
-#按需要开启公共服务
-echo '==================4.2启动 mysql or redis or rabbitmq && 初始化数据库 ========'
-docker-compose -f docker-compose.yml up -d mysql
-docker-compose -f docker-compose.yml up -d redis
-docker-compose -f docker-compose.yml up -d rabbitmq
-
-sleep 10
-docker-compose -f docker-compose.yml -f docker-compose.db-init.yml up mysql-init
-
 echo '当前目录:' && pwd
 
 #回到根目录
@@ -106,9 +41,8 @@ cd docker-compose
 docker-compose -f docker-compose.yml -f docker-compose.center.yml up -d eureka-server
 
 #启动配置中心, 消息中心
-#可以使用Spring自带的config, 也可以直接使用apollo
+#apollo
 docker-compose -f docker-compose.yml -f docker-compose.config.yml up -d
-#docker-compose -f docker-compose.yml -f docker-compose.center.yml up -d config-server
 
 #启动消息中心
 docker-compose -f docker-compose.yml -f docker-compose.center.yml up -d bus-server
